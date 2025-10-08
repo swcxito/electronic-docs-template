@@ -20,6 +20,10 @@ A Sphinx documentation template specifically designed for electronic circuit doc
 
 ![wavedrom](./assets/wavedrom.svg)
 
+- **🚀 Automatic Deployment to GitHub Pages**: Supports automatic building and deployment of documentation to GitHub Pages via GitHub Actions.
+
+  - See example page: [https://swcxito.github.io/electronic-docs-template/](https://swcxito.github.io/electronic-docs-template/)
+
 ## Quick Start
 
 ### Create your repository

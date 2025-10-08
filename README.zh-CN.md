@@ -1,4 +1,5 @@
 # 电子文档模板（Electronic Documentation Template）
+
 [English](README.md) | 简体中文
 
 [![Sphinx](https://img.shields.io/badge/Using-Sphinx-green?logo=sphinx)](https://github.com/sphinx-doc/sphinx)
@@ -6,7 +7,6 @@
 [![License-docs](https://img.shields.io/badge/Documentation%20License-MIT-blue)](LICENSE.docs)
 
 [![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
-
 
 一个专为电子电路文档而设计的 Sphinx 模板，内置电路仿真与时序图功能，支持交互式演示与精美波形渲染。
 
@@ -21,9 +21,14 @@
 
 ![wavedrom](./assets/wavedrom.svg)
 
+- **🚀 自动部署到 GitHub Pages**：支持通过 GitHub Actions 自动构建并部署文档到 GitHub Pages。
+
+  - 查看示例页面：[https://swcxito.github.io/electronic-docs-template/](https://swcxito.github.io/electronic-docs-template/)
+
 ## 快速开始
 
 ### 创建你的仓库
+
 1. 点击「Use this template」
 2. Git 克隆到本地
 3. 进入仓库目录
@@ -37,6 +42,7 @@
 ### 构建文档
 
 #### 方式一：使用 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)（推荐）
+
 1) 安装依赖（首次执行）：
 
 ```powershell
@@ -62,6 +68,7 @@ uv run make html
 ```
 
 #### 方式二：使用 pip（建议先创建虚拟环境）
+
 1) 安装依赖（首次执行）：
 
 ```powershell
@@ -83,6 +90,7 @@ make html
 ```
 
 ### 查看生成的文档
+
 > 由于现代浏览器的安全策略，直接从文件系统打开 HTML 时，部分功能（如 CircuitJS 仿真）可能无法正常运行。建议通过本地 Web 服务器查看。
 
 1) 启动简易 HTTP 服务器：
@@ -96,6 +104,7 @@ python -m http.server --directory build/html 8080
 ## 使用说明
 
 ### 编写文档
+
 本模板同时支持 reStructuredText 与 Markdown：
 
 - reStructuredText：使用 `.rst` 文件，获得完整的 Sphinx 能力
@@ -106,12 +115,14 @@ Sphinx 文档： [![Sphinx Documentation](https://img.shields.io/badge/Sphinx-do
 ### 电路仿真（CircuitJS）
 
 #### 获取电路数据
+
 1. 打开 [CircuitJS1](https://www.falstad.com/circuit/circuitjs.html)
 2. 新建或加载电路
 3. 依次点击「File」→「Export to URL」，复制生成的 URL
 4. 从 URL 中提取电路数据（`ctz=` 后面的部分）
 
 #### 在文档中嵌入交互式仿真
+
 使用自定义 `circuit` 指令：
 
 ```rst
@@ -134,6 +145,7 @@ Sphinx 文档： [![Sphinx Documentation](https://img.shields.io/badge/Sphinx-do
 - `mouseWheelEdit`：是否启用滚轮修改参数（默认 true）
 
 ### 时序图（WaveDrom）
+
 使用 WaveDrom 语法创建波形图：
 
 ```rst
@@ -149,6 +161,7 @@ Sphinx 文档： [![Sphinx Documentation](https://img.shields.io/badge/Sphinx-do
 WaveDrom 教程： [![WaveDrom Documentation](https://img.shields.io/badge/WaveDrom-tutorial-green?logo=wavedrom)](https://wavedrom.com/tutorial.html)
 
 ## 配置说明
+
 主要配置位于 `source/conf.py`：
 
 - 项目信息：`project`、`author`、`copyright`
@@ -156,6 +169,7 @@ WaveDrom 教程： [![WaveDrom Documentation](https://img.shields.io/badge/WaveD
 - 主题：配置 HTML 主题与外观
 
 ## 贡献
+
 1. Fork 本仓库
 2. 创建功能分支
 3. 完成你的修改
@@ -165,6 +179,7 @@ WaveDrom 教程： [![WaveDrom Documentation](https://img.shields.io/badge/WaveD
 ## 📜 许可证
 
 ### 项目许可
+
 本项目 **electronic-docs-template** 采用 **GNU General Public License, Version 2 (GPLv2)** 授权。
 详见 [LICENSE](./LICENSE)。
 
@@ -175,15 +190,16 @@ WaveDrom 教程： [![WaveDrom Documentation](https://img.shields.io/badge/WaveD
 
 ### 集成的第三方组件
 
-| 组件 | 源码 | 许可证 |
-| - | - | - |
-| **Sphinx** | [![GitHub](https://img.shields.io/badge/source-sphinx-blue?logo=github)](https://github.com/sphinx-doc/sphinx) | ![BSD License](https://img.shields.io/badge/license-BSD-green) |
-| **sphinx-wavedrom** | [![GitHub](https://img.shields.io/badge/source-sphinx--wavedrom-blue?logo=github)](https://github.com/bavovanachte/sphinx-wavedrom) | ![MIT License](https://img.shields.io/badge/license-MIT-green) |
-| **CircuitJS1** | [![GitHub](https://img.shields.io/badge/source-circuitjs1-blue?logo=github)](https://github.com/pfalstad/circuitjs1) | ![GPLv2 License](https://img.shields.io/badge/license-GPLv2-blue) |
+| 组件                      | 源码                                                                                                                           | 许可证                                                          |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| **Sphinx**          | [![GitHub](https://img.shields.io/badge/source-sphinx-blue?logo=github)](https://github.com/sphinx-doc/sphinx)                      | ![BSD License](https://img.shields.io/badge/license-BSD-green)    |
+| **sphinx-wavedrom** | [![GitHub](https://img.shields.io/badge/source-sphinx--wavedrom-blue?logo=github)](https://github.com/bavovanachte/sphinx-wavedrom) | ![MIT License](https://img.shields.io/badge/license-MIT-green)    |
+| **CircuitJS1**      | [![GitHub](https://img.shields.io/badge/source-circuitjs1-blue?logo=github)](https://github.com/pfalstad/circuitjs1)                | ![GPLv2 License](https://img.shields.io/badge/license-GPLv2-blue) |
 
 ---
 
 ### 文档内容许可
+
 注意：本仓库中的「文档内容」采用 **MIT 许可证** 授权，详见 [LICENSE.docs](./LICENSE.docs)。
 
 尽管本模板以 **GPLv2** 授权，使用本模板创作的「文档内容」（例如你编写的 `.rst` 或 `.md` 文件）
@@ -206,6 +222,6 @@ WaveDrom 教程： [![WaveDrom Documentation](https://img.shields.io/badge/WaveD
 
 ---
 
-作者：swcxito  
-版本：0.1  
+作者：swcxito
+版本：0.1
 最后更新：2025
