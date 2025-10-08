@@ -1,7 +1,10 @@
 # Electronic Documentation Template
 [English] | [简体中文](README.zh-CN.md)
+
 [![Sphinx](https://img.shields.io/badge/Using-Sphinx-green?logo=sphinx)](https://github.com/sphinx-doc/sphinx)[![License](https://img.shields.io/badge/License-GPLv2-blue)](LICENSE)
+
 [![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
+
 A Sphinx documentation template specifically designed for electronic circuit documentation, featuring integrated circuit simulation and timing diagram capabilities.
 
 ## Features
@@ -24,6 +27,7 @@ A Sphinx documentation template specifically designed for electronic circuit doc
 3. Enter the repo folder
 
 If you are using this repo, putting the following badge on your README is appreciated:
+
 [![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
 ``` md
 [![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
