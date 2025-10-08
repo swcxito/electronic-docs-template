@@ -1,0 +1,85 @@
+name: Test Build Documentation
+
+on:
+  # 在推送到非主分支时触发
+  push:
+    branches-ignore: [ main ]
+
+  # 在拉取请求时触发
+  pull_request:
+    branches: [ main ]
+
+  # 允许手动触发工作流
+  workflow_dispatch:
+
+# 设置基本权限
+permissions:
+  contents: read
+
+# 确保同时只有一个测试构建在运行（针对同一分支）
+concurrency:
+  group: "test-build-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  # 测试构建作业
+  test-build:
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: 安装依赖
+        run: uv sync
+
+      - name: 运行代码检查 (可选)
+        run: |
+          # 如果项目有 linting 工具，可以在这里添加
+          echo "跳过代码检查 - 可根据需要添加 flake8, black, isort 等"
+
+      - name: 测试构建文档
+        run: |
+          uv run make html
+
+      - name: 检查构建结果
+        run: |
+          # 检查是否生成了必要的文件
+          ls -la build/html/
+          if [ ! -f "build/html/index.html" ]; then
+            echo "错误: index.html 未生成"
+            exit 1
+          fi
+          echo "✅ 文档构建成功!"
+
+      - name: 上传构建产物 (用于调试)
+        uses: actions/upload-artifact@v4
+        if: always()  # 即使构建失败也上传，方便调试
+        with:
+          name: test-build-${{ github.sha }}
+          path: build/html/
+          retention-days: 7  # 保留7天
+
+      - name: 构建摘要
+        if: always()
+        run: |
+          echo "## 📄 构建测试摘要" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **分支**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **提交**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **构建状态**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ 文档构建成功! 可以合并到主分支。" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ 文档构建失败，请检查错误信息。" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "构建产物已上传为工件，可在 Actions 页面下载查看。" >> $GITHUB_STEP_SUMMARY
