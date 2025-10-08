@@ -1,7 +1,9 @@
 # Electronic Documentation Template
 [English] | [简体中文](README.zh-CN.md)
 
-[![Sphinx](https://img.shields.io/badge/Using-Sphinx-green?logo=sphinx)](https://github.com/sphinx-doc/sphinx)[![License](https://img.shields.io/badge/License-GPLv2-blue)](LICENSE)
+[![Sphinx](https://img.shields.io/badge/Using-Sphinx-green?logo=sphinx)](https://github.com/sphinx-doc/sphinx)
+[![License](https://img.shields.io/badge/License-GPLv2-blue)](LICENSE)
+[![License-docs](https://img.shields.io/badge/Documentation%20License-MIT-blue)](LICENSE.docs)
 
 [![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
 
@@ -10,7 +12,6 @@ A Sphinx documentation template specifically designed for electronic circuit doc
 ## Features
 
 - **📚 Sphinx Documentation**: Built on the powerful Sphinx documentation generator
-
 - **⚡ Circuit Demonstration and Simulation**: Integrated CircuitJS simulator for interactive circuit demonstrations
 
 <img src="./assets/image-circuitjs.png" alt="image-circuitjs" style="zoom: 33%;" />
@@ -169,8 +170,10 @@ This project integrates or automates the use of several open-source components:
 
 ### Documentation License
 
-Although this template itself is licensed under **GPLv2**,  
-any **documentation content** (e.g., `.rst` or `.md` files created using this template)  
+Note: The documentation content in this repository is licensed under the **MIT License**. See [LICENSE.docs](./LICENSE.docs) for full terms.
+
+Although this template itself is licensed under **GPLv2**,
+any **documentation content** (e.g., `.rst` or `.md` files created using this template)
 may be released by its authors under **a different license** — for example:
 
 - [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)

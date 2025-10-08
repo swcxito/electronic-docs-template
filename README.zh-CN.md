@@ -1,8 +1,12 @@
 # 电子文档模板（Electronic Documentation Template）
-[![Sphinx](https://img.shields.io/badge/Using-Sphinx-green?logo=sphinx)](https://github.com/sphinx-doc/sphinx) [![License](https://img.shields.io/badge/License-GPLv2-blue)](LICENSE)
+[English](README.md) | 简体中文
+
+[![Sphinx](https://img.shields.io/badge/Using-Sphinx-green?logo=sphinx)](https://github.com/sphinx-doc/sphinx)
+[![License](https://img.shields.io/badge/License-GPLv2-blue)](LICENSE)
+[![License-docs](https://img.shields.io/badge/Documentation%20License-MIT-blue)](LICENSE.docs)
+
 [![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
 
-[English](README.md) | 简体中文
 
 一个专为电子电路文档而设计的 Sphinx 模板，内置电路仿真与时序图功能，支持交互式演示与精美波形渲染。
 
@@ -180,6 +184,8 @@ WaveDrom 教程： [![WaveDrom Documentation](https://img.shields.io/badge/WaveD
 ---
 
 ### 文档内容许可
+注意：本仓库中的「文档内容」采用 **MIT 许可证** 授权，详见 [LICENSE.docs](./LICENSE.docs)。
+
 尽管本模板以 **GPLv2** 授权，使用本模板创作的「文档内容」（例如你编写的 `.rst` 或 `.md` 文件）
 可以由作者自行选择许可协议，例如：
 
