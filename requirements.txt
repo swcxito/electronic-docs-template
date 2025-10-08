@@ -1,0 +1,4 @@
+lzstring>=1.0.4
+myst-parser>=4.0.1
+sphinx>=8.2.3
+sphinxcontrib-wavedrom>=3.0.4
