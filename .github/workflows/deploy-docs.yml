@@ -1,0 +1,68 @@
+name: Build and Deploy Sphinx Docs
+
+on:
+  # 在推送到主分支时触发
+  push:
+    branches: [ main ]
+
+  # 允许手动触发工作流
+  workflow_dispatch:
+
+# 设置 GITHUB_TOKEN 权限以允许部署到 GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 确保同时只有一个部署在运行
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # 构建作业
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: 设置 UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: 安装依赖
+        run: uv sync
+
+      - name: 构建文档
+        run: |
+          uv run make html
+
+      - name: 创建 .nojekyll 文件
+        run: touch build/html/.nojekyll
+
+      - name: 设置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 上传 Pages 构建产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/html
+
+  # 部署作业
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
