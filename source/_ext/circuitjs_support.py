@@ -115,7 +115,7 @@ class CircuitJSDirective(SphinxDirective):
         paragraph_node = nodes.raw(
             format='html',
             text=(
-                f'<iframe src="circuitjs/circuitjs.html?{params}" '
+                f'<iframe src="/circuitjs/circuitjs.html?{params}" '
                 f'width="{opts["width"]}" height="{opts["height"]}" frameborder="0"></iframe>'
             ),
         )
