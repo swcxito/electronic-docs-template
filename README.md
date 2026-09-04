@@ -1,202 +1,172 @@
 # Electronic Documentation Template
-[English] | [简体中文](README.zh-CN.md)
 
-[![Sphinx](https://img.shields.io/badge/Using-Sphinx-green?logo=sphinx)](https://github.com/sphinx-doc/sphinx)
+English | [简体中文](README.zh-CN.md)
+
+[![Starlight](https://img.shields.io/badge/Astro-Starlight-blueviolet?logo=astro)](https://starlight.astro.build/)
+[![Build](https://github.com/swcxito/electronic-docs-template/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/swcxito/electronic-docs-template/actions/workflows/deploy-docs.yml)
 [![License](https://img.shields.io/badge/License-GPLv2-blue)](LICENSE)
-[![License-docs](https://img.shields.io/badge/Documentation%20License-MIT-blue)](LICENSE.docs)
+[![Documentation license](https://img.shields.io/badge/Documentation-MIT-blue)](LICENSE.docs)
 
-[![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
+An **Astro Starlight** template for electronic circuit documentation, with bundled **CircuitJS** simulation and **WaveDrom** timing diagrams.
 
-A Sphinx documentation template specifically designed for electronic circuit documentation, featuring integrated circuit simulation and timing diagram capabilities.
+[Live documentation](https://swcxito.github.io/electronic-docs-template/) · [Original Sphinx version](https://github.com/swcxito/electronic-docs-template/tree/sphinx)
+
+## Branches and migration
+
+- **`main`**: the Starlight implementation, generated in a separate directory from the official `starlight` starter and then populated with the original examples and simulator assets.
+- **`sphinx`**: the unchanged original source at `7c4917f1a892fb3e61fd36127532b5081e527fd8`, with its Python tooling and README.
+
+The migration preserves Git history and the existing licenses. The original project was not used as the scaffold.
 
 ## Features
 
-- **📚 Sphinx Documentation**: Built on the powerful Sphinx documentation generator
-- **⚡ Circuit Demonstration and Simulation**: Integrated CircuitJS simulator for interactive circuit demonstrations
+- Markdown and MDX, Starlight navigation, full-text search, syntax highlighting, and light/dark themes.
+- Local CircuitJS assets, all original simulation options, compressed-data validation, and English/Chinese error messages.
+- WaveDrom WaveJSON/JSON5 rendered into SVG at build time, without a runtime CDN dependency.
+- GitHub Pages project-path support, including simulators embedded in nested pages.
+- pnpm lockfile, Astro checks, component tests, browser tests, and GitHub Actions deployment.
 
-<img src="./assets/image-circuitjs.png" alt="image-circuitjs" style="zoom: 33%;" />
+## Quick start
 
-- **📊 Timing Diagrams**: WaveDrom support for beautiful timing diagrams and waveforms
+Requirements: **Node.js 24+** and **pnpm 11.24.0** (pinned in `package.json`).
 
-![wavedrom](./assets/wavedrom.svg)
+1. Select **Use this template** on GitHub and clone your repository.
+2. Install dependencies and start Astro:
 
-- **🚀 Automatic Deployment to GitHub Pages**: Supports automatic building and deployment of documentation to GitHub Pages via GitHub Actions.
-
-  - See example page: [https://swcxito.github.io/electronic-docs-template/](https://swcxito.github.io/electronic-docs-template/)
-
-## Quick Start
-
-### Create your repository
-1. Click Use this template
-2. Git clone your new repo
-3. Enter the repo folder
-
-If you are using this repo, putting the following badge on your README is appreciated:
-
-[![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
-``` md
-[![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
+```sh
+pnpm install
+pnpm dev
 ```
 
+Open the URL printed by Astro, normally `http://localhost:4321/electronic-docs-template/` for this repository.
 
-### Build the documentation
-#### Using [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv) (Recommended)
-1. Install required dependencies(first-time only):
-```bash
-uv sync
+```sh
+pnpm build       # Generate dist/
+pnpm preview     # Serve the production build over HTTP
 ```
 
-2. Build the documentation:
-```bash
-# On Linux
-uv run make html
-```
-#### Using pip (Using venv is Recommended)
-1. Install required dependencies(first-time only):
-```bash
-pip install -r requirements.txt
-```
+## Writing documentation
 
-2. Build the documentation:
-```bash
-# On Linux
-make html
-```
+Add `.md` or `.mdx` files to `src/content/docs/`, with `title` and optionally `description` in YAML frontmatter. Configure navigation and site metadata in `astro.config.mjs`.
 
-> **If you want to build the documentation on Windows, build it through [WSL](https://learn.microsoft.com/en-us/windows/wsl/install).**
+MDX pages can import the following components. These paths assume the page is in `src/content/docs/guides/`.
 
-### Open the generated documentation:
-> Due to the security policy of modern browsers, some features (like CircuitJS simulation) may not work properly when opening the HTML files directly. It's recommended to use a local web server to serve the files.
-1. Start a simple HTTP server:
-```bash
-# Run server
-python -m http.server --directory build/html 8080
-```
-2. Open your browser and navigate to `http://localhost:8080`
+### CircuitJS
 
-## Usage
+Create a circuit in [CircuitJS](https://www.falstad.com/circuit/circuitjs.html), export its link from the File menu, and extract the `ctz` parameter.
 
-### Writing Documentation
+```mdx
+import Circuit from '../../../components/Circuit.astro';
+import { circuitExample } from '../../../lib/examples';
 
-This template supports both reStructuredText and Markdown formats:
-
-- **reStructuredText**: Use `.rst` files for full Sphinx feature support
-- **Markdown**: Use `.md` files for simpler syntax (via MyST parser)
-
-You can access Sphinx for more details: [![Sphinx Documentation](https://img.shields.io/badge/Sphinx-docs-blue?logo=sphinx)](https://www.sphinx-doc.org/)
-
-### Circuit Simulation
-#### Get Circuit Data:
-
-1. Open [CircuitJS1](https://www.falstad.com/circuit/circuitjs.html)
-2. Create or load a circuit
-3. Click "File" -> "Export to URL" and copy the generated url
-4. Extract the circuit data from the URL (the part after `ctz=`)
-
-#### Use the custom `circuit` directive to embed interactive CircuitJS simulations:
-
-```rst
-.. circuit:: your-circuit-data-here
-   :height: 640
-   :width: 100%
-   :running: true
-   :editable: false
+<Circuit
+  ctz={circuitExample}
+  title="Example circuit"
+  height={600}
+  running={true}
+  editable={false}
+/>
 ```
 
-**Available Options:**
+Replace `circuitExample` with your exported data string. Boolean props must use braces, e.g. `running={false}`.
 
-- `height`: iframe height (default: 640)
-- `width`: iframe width (default: 100%)
-- `running`: start simulation automatically (default: true)
-- `hide-menu`: hide the top menu (default: true)
-- `hide-sidebar`: hide the right sidebar (default: false)
-- `editable`: allow circuit editing (default: false)
-- `hide-infobox`: hide component info box (default: false)
-- `mousewheel-edit`: enable mouse wheel parameter editing (default: true)
+| Prop | Default | Description |
+| --- | --- | --- |
+| `ctz` | Required | Compressed CircuitJS circuit data |
+| `title` | Interactive CircuitJS simulation | Accessible iframe title |
+| `height` | `640` | Pixels as a number, or a CSS length such as `600px` |
+| `width` | `100%` | Width, constrained to the page |
+| `running` | `true` | Start simulation automatically |
+| `hideMenu` | `true` | Hide the top menu |
+| `hideSidebar` | `false` | Hide the simulator sidebar |
+| `editable` | `false` | Allow circuit editing |
+| `hideInfoBox` | `false` | Hide component information |
+| `mouseWheelEdit` | `true` | Enable mouse-wheel parameter editing |
+| `lang` | `en` | Error language (`zh-CN` selects Chinese) |
 
+Invalid `ctz` data displays an error message instead of an iframe. The simulator is bundled unchanged in `public/circuitjs/`; no external simulator service is required.
 
-### Timing Diagrams
+### WaveDrom
 
-Create timing diagrams using WaveDrom syntax:
+```mdx
+import WaveDrom from '../../../components/WaveDrom.astro';
 
-```rst
-.. wavedrom::
-
-   { "signal": [
-     { "name": "clk",  "wave": "P......" },
-     { "name": "bus",  "wave": "x.==.=x", "data": ["head", "body", "tail"] },
-     { "name": "wire", "wave": "0.1..0." }
-   ]}
+<WaveDrom title="Clock and data transfer" source={{
+  signal: [
+    { name: 'clk', wave: 'P......' },
+    { name: 'bus', wave: 'x.==.=x', data: ['head', 'body', 'tail'] },
+    { name: 'wire', wave: '0.1..0.' },
+  ],
+}} />
 ```
 
-access WaveDrom for more details: [![WaveDrom Documentation](https://img.shields.io/badge/WaveDrom-tutorial-green?logo=wavedrom)](https://wavedrom.com/tutorial.html)
+`source` accepts a WaveJSON object or a JSON5 string. `signal`, `reg`, and `assign` diagrams and the default/narrow/lowkey skins are supported. SVGs are isolated image documents so multiple diagrams do not conflict. Invalid input fails the build. See the [WaveDrom tutorial](https://wavedrom.com/tutorial.html).
 
-## Configuration
+## Plugin migration
 
-The main configuration is in `conf.py`. Key settings include:
+| Sphinx implementation | Starlight implementation |
+| --- | --- |
+| Sphinx + Alabaster | Astro + Starlight |
+| `myst_parser` | Native Markdown/MDX |
+| `sphinxcontrib.wavedrom` | `WaveDrom.astro` + `wavedrom` |
+| `circuitjs_support` | `Circuit.astro` |
+| Python `lzstring` | JavaScript `lz-string` |
+| `html_extra_path` | `public/circuitjs/` |
 
-- **Project Information**: Update `project`, `author`, and `copyright`
-- **Extensions**: Add or remove Sphinx extensions
-- **Theme**: Customize the HTML theme and appearance
+Convert `.rst` and MyST directives/roles to Markdown/MDX; they are not interpreted by Starlight. Circuit option names change from kebab-case to camelCase (`hide-menu` → `hideMenu`, `mousewheel-edit` → `mouseWheelEdit`). Detailed notes live in [the migration guide](src/content/docs/reference/migration.md).
 
+## Validation
 
-## Contributing
+```sh
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
+pnpm validate
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test the documentation builds correctly
-5. Submit a pull request
+`validate` runs `pnpm check`, `pnpm test`, `pnpm build`, and `pnpm test:e2e`. Tests cover original circuit data, defaults and overrides, root/project URLs, WaveDrom output, invalid inputs, live simulation, page links, search, themes, and mobile navigation. On Linux, use `pnpm exec playwright install --with-deps chromium` when browser system libraries are missing.
 
-## 📜 License
+## Deployment and configuration
 
-### Project License
-This project, **electronic-docs-template**, is licensed under the **GNU General Public License, Version 2 (GPLv2)**.  
-See the [LICENSE](./LICENSE) file for full terms.
+In **Settings → Pages**, select **GitHub Actions**. A push to `main` validates and publishes `dist/`; pull requests validate without deploying.
 
-© 2025 swcxito.
-You are free to use, modify, and redistribute this template under the terms of GPLv2.
+The workflow obtains the public origin and base path from `actions/configure-pages`. The following environment variables support forks and other hosts:
 
----
+| Variable | Default outside deployment CI |
+| --- | --- |
+| `GITHUB_REPOSITORY` | `swcxito/electronic-docs-template`; used for GitHub/edit links and default URL |
+| `SITE_URL` | `https://OWNER.github.io` |
+| `BASE_PATH` | `/REPOSITORY`, or `/` for `OWNER.github.io` repositories |
 
-### Included Components
+```sh
+SITE_URL=https://docs.example.com BASE_PATH=/ pnpm build
+```
 
-This project integrates or automates the use of several open-source components:
+Serve the output over HTTP rather than opening it with `file://`.
 
-| Component| Source| License|
-|-|-|-|
-| **Sphinx**          | [![GitHub](https://img.shields.io/badge/source-sphinx-blue?logo=github)](https://github.com/sphinx-doc/sphinx)| ![BSD License](https://img.shields.io/badge/license-BSD-green)|
-| **sphinx-wavedrom** | [![GitHub](https://img.shields.io/badge/source-sphinx--wavedrom-blue?logo=github)](https://github.com/bavovanachte/sphinx-wavedrom)| ![MIT License](https://img.shields.io/badge/license-MIT-green)|
-| **CircuitJS1**      | [![GitHub](https://img.shields.io/badge/source-circuitjs1-blue?logo=github)](https://github.com/pfalstad/circuitjs1)| ![GPLv2 License](https://img.shields.io/badge/license-GPLv2-blue)|
+## Project structure
 
+```text
+astro.config.mjs          Site, navigation, and Pages path configuration
+src/content/docs/        Markdown and MDX documentation
+src/components/          Circuit.astro and WaveDrom.astro
+src/lib/                 Validation, rendering, and original example data
+src/styles/              Documentation styling
+public/circuitjs/        Original bundled CircuitJS distribution
+assets/                  Original README illustration assets
+tests/                  Unit and production-browser tests
+.github/workflows/       Validation and GitHub Pages deployment
+```
 
----
+## License and attribution
 
-### Documentation License
+The template remains **GPLv2**: see [LICENSE](LICENSE). Documentation remains **MIT**: see [LICENSE.docs](LICENSE.docs). Authors retain copyright in new documentation they write with this template and may choose their own content license.
 
-Note: The documentation content in this repository is licensed under the **MIT License**. See [LICENSE.docs](./LICENSE.docs) for full terms.
+| Component | License / source |
+| --- | --- |
+| Astro / Starlight and official starter | MIT — [Astro](https://github.com/withastro/astro), [Starlight](https://github.com/withastro/starlight) |
+| CircuitJS1 | GPLv2 — [pfalstad/circuitjs1](https://github.com/pfalstad/circuitjs1) |
+| WaveDrom / ONML | MIT — [WaveDrom](https://github.com/wavedrom/wavedrom), [ONML](https://github.com/drom/onml) |
+| lz-string | MIT — [lz-string](https://github.com/pieroxy/lz-string) |
+| JSON5 | MIT — [JSON5](https://github.com/json5/json5) |
 
-Although this template itself is licensed under **GPLv2**,
-any **documentation content** (e.g., `.rst` or `.md` files created using this template)
-may be released by its authors under **a different license** — for example:
-
-- [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
-- [Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/)
-- [Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)
-- or any other license chosen by the author.
-
-Users creating new documentation with this template **retain full copyright** over their written content.
-
-## Version History
-
-- **v0.1** (2025): Initial template release
-  - Basic Sphinx setup
-  - CircuitJS integration
-  - WaveDrom support
-  - RTD theme configuration
-
----
-
-**Author**: swcxito
-**Version**: 0.1
-**Last Updated**: 2025
+Bundled font notices are retained under `public/circuitjs/font/`. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for starter attribution.

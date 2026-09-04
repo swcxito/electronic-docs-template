@@ -1,0 +1,3 @@
+:root { --sl-content-width: 52rem; }
+.wavedrom { overflow-x: auto; padding: 1rem; border-radius: 0.5rem; background: white; color: #111; }
+.wavedrom img { display: block; max-width: none; }

@@ -1,0 +1,35 @@
+{
+  "name": "electronic-docs-template",
+  "type": "module",
+  "version": "0.2.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "check": "astro check",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": "node --test tests/unit.test.ts",
+    "test:e2e": "playwright test",
+    "validate": "pnpm check && pnpm test && pnpm build && pnpm test:e2e"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.0",
+    "astro": "^7.2.10",
+    "json5": "^2.2.3",
+    "lz-string": "^1.5.0",
+    "onml": "^2.1.0",
+    "sharp": "^0.35.3",
+    "wavedrom": "^3.7.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.62.1",
+    "typescript": "^6.0.3"
+  },
+  "private": true,
+  "packageManager": "pnpm@11.24.0",
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

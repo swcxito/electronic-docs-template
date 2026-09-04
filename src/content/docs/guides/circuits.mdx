@@ -1,0 +1,56 @@
+---
+title: Circuit simulation
+description: Embed the bundled CircuitJS simulator and control its behavior.
+---
+
+import Circuit from '../../../components/Circuit.astro';
+import { circuitExample } from '../../../lib/examples';
+
+## Get circuit data
+
+Open [CircuitJS](https://www.falstad.com/circuit/circuitjs.html), create or load a circuit, and select **File → Export as Link** (called **Export to URL** in some versions). Copy the `ctz` query parameter. You can also enable the local simulator menu with `hideMenu={false}`.
+
+## Embed a simulation
+
+Import the component in an MDX page. Component import paths are relative to the page; the example below assumes `src/content/docs/guides/`.
+
+```mdx
+import Circuit from '../../../components/Circuit.astro';
+import { circuitExample } from '../../../lib/examples';
+
+<Circuit ctz={circuitExample} height={600} running={true} editable={false} />
+```
+
+Replace `circuitExample` with your exported data string. Use braces for booleans: `running={false}`, not `running="false"`.
+
+<Circuit ctz={circuitExample} height="600px" title="CircuitJS simulation on a nested documentation route" />
+
+## Options
+
+| Prop | Default | Purpose |
+| --- | --- | --- |
+| `ctz` | Required | Compressed CircuitJS data from an exported link |
+| `title` | Interactive CircuitJS simulation | Accessible iframe title |
+| `height` | `640` | Number of pixels or a CSS length |
+| `width` | `100%` | Number of pixels or a CSS length; capped at the content width |
+| `running` | `true` | Start simulation automatically |
+| `hideMenu` | `true` | Hide the top menu |
+| `hideSidebar` | `false` | Hide the simulator sidebar |
+| `editable` | `false` | Allow editing the circuit |
+| `hideInfoBox` | `false` | Hide the component information box |
+| `mouseWheelEdit` | `true` | Allow wheel-based parameter edits |
+| `lang` | `en` | Error language; values starting with `zh` select Chinese |
+
+The iframe URL automatically includes Astro's base path, including from nested pages. All simulator assets are served locally from `public/circuitjs/`.
+
+## Invalid data
+
+Invalid data produces a readable message instead of opening a broken simulator. This reproduces the original template's intentional error example:
+
+```mdx
+<Circuit ctz="errortest" />
+<Circuit ctz="errortest" lang="zh-CN" />
+```
+
+<Circuit ctz="errortest" />
+<Circuit ctz="errortest" lang="zh-CN" />

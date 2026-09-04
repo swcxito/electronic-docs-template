@@ -1,0 +1,51 @@
+---
+title: Timing diagrams
+description: Render WaveDrom timing diagrams, registers, and logic diagrams from MDX.
+---
+
+import WaveDrom from '../../../components/WaveDrom.astro';
+import { timingExample } from '../../../lib/examples';
+
+## Embed a waveform
+
+Use the `WaveDrom` component in an MDX page. The `source` prop accepts a WaveJSON object or a JSON5 string; `title` provides an accessible description and caption.
+
+```mdx
+import WaveDrom from '../../../components/WaveDrom.astro';
+
+<WaveDrom
+  title="Clock and data transfer"
+  source={{ signal: [
+    { name: 'clk', wave: 'P......' },
+    { name: 'bus', wave: 'x.==.=x', data: ['head', 'body', 'tail'] },
+    { name: 'wire', wave: '0.1..0.' },
+  ] }}
+/>
+```
+
+<WaveDrom source={timingExample} title="Clock and data transfer" />
+
+## JSON5 source
+
+JSON5 supports comments, single quotes, and unquoted keys. Source is parsed as data; it is never evaluated as JavaScript.
+
+<WaveDrom title="Request and acknowledge" source={`{
+  signal: [
+    { name: 'req', wave: '01...0.' },
+    { name: 'ack', wave: '0..1.0.' },
+  ],
+  config: { hscale: 2 },
+}`} />
+
+## Register diagrams
+
+WaveDrom's `reg` and `assign` forms are supported as well as `signal`. The default, narrow, and lowkey skins are bundled.
+
+<WaveDrom title="Eight-bit control register" source={{
+  reg: [{ bits: 1, name: 'EN' }, { bits: 3, name: 'MODE' }, { bits: 4, name: 'DATA' }],
+  config: { bits: 8 },
+}} />
+
+Diagrams are generated as independent SVG images during the build. Multiple diagrams can share a page without conflicting IDs or styles, and narrow screens can scroll wide diagrams. Invalid WaveJSON fails the build so broken diagrams cannot silently be published.
+
+See the [WaveDrom tutorial](https://wavedrom.com/tutorial.html) for waveform syntax, grouping, edges, and annotations.

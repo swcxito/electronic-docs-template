@@ -1,0 +1,33 @@
+---
+title: Electronic Documentation Template
+description: Write electronic circuit documentation with interactive CircuitJS simulations and WaveDrom timing diagrams.
+---
+
+import Circuit from '../../components/Circuit.astro';
+import WaveDrom from '../../components/WaveDrom.astro';
+import { circuitExample, timingExample } from '../../lib/examples';
+
+A documentation template for electronics, built with **Astro Starlight**. Keep explanations, working circuits, and digital timing diagrams together in Markdown and MDX.
+
+Use the sidebar to get started, learn the components, or migrate an existing Sphinx page.
+
+## Timing diagrams
+
+Describe clocks, buses, and signals with WaveDrom. Diagrams render to SVG during the build and work without browser JavaScript or a third-party service.
+
+<WaveDrom source={timingExample} title="Clock, bus, and wire timing" />
+
+## Interactive circuit simulation
+
+The original CircuitJS simulator and example circuit are bundled with the site. Interact with the circuit below to explore its behavior.
+
+<Circuit ctz={circuitExample} height={600} title="Example electronic circuit simulation" />
+
+## Made for documentation
+
+- Markdown and MDX authoring, syntax highlighting, and copy buttons.
+- Starlight navigation, full-text search, and light and dark themes.
+- CircuitJS simulation options and invalid-data messages.
+- GitHub Actions validation and GitHub Pages deployment.
+
+The original implementation is preserved on the [sphinx branch](https://github.com/swcxito/electronic-docs-template/tree/sphinx).

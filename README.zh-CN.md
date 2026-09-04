@@ -1,227 +1,154 @@
-# 电子文档模板（Electronic Documentation Template）
+# 电子电路文档模板
 
 [English](README.md) | 简体中文
 
-[![Sphinx](https://img.shields.io/badge/Using-Sphinx-green?logo=sphinx)](https://github.com/sphinx-doc/sphinx)
-[![License](https://img.shields.io/badge/License-GPLv2-blue)](LICENSE)
-[![License-docs](https://img.shields.io/badge/Documentation%20License-MIT-blue)](LICENSE.docs)
+基于 **Astro Starlight** 的电子电路文档模板，集成随站点部署的 **CircuitJS** 仿真器和 **WaveDrom** 时序图。
 
-[![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
+[在线文档](https://swcxito.github.io/electronic-docs-template/) · [原 Sphinx 版本](https://github.com/swcxito/electronic-docs-template/tree/sphinx)
 
-一个专为电子电路文档而设计的 Sphinx 模板，内置电路仿真与时序图功能，支持交互式演示与精美波形渲染。
+## 分支说明
 
-## 功能特性
+- **`main`**：从官方 `starlight` 模板在独立目录中新建，再迁入原项目的电路、波形示例和模拟器资源。
+- **`sphinx`**：原始 Sphinx 代码，保留在提交 `7c4917f1a892fb3e61fd36127532b5081e527fd8`，该分支的 README 包含原 Python 构建方式。
 
-- 📚 基于 Sphinx 的强大文档能力
-- ⚡ 集成 CircuitJS 电路仿真，支持交互演示
+迁移保留 Git 历史和原有许可证。新实现以官方模板为起点，没有在原工程目录上直接改造。
 
-<img src="./assets/image-circuitjs.png" alt="image-circuitjs" style="zoom: 33%;" />
+## 功能
 
-- 📊 支持 WaveDrom 时序图与波形绘制
-
-![wavedrom](./assets/wavedrom.svg)
-
-- **🚀 自动部署到 GitHub Pages**：支持通过 GitHub Actions 自动构建并部署文档到 GitHub Pages。
-
-  - 查看示例页面：[https://swcxito.github.io/electronic-docs-template/](https://swcxito.github.io/electronic-docs-template/)
+- Markdown/MDX 文档、侧边栏、全文搜索、代码高亮与明暗主题。
+- CircuitJS 本地资源、原有全部仿真参数、数据校验及中英文错误提示。
+- WaveDrom 在构建时生成 SVG，无需运行时 CDN 或浏览器 JavaScript。
+- 适配 GitHub Pages 仓库子路径和嵌套文档中的电路资源。
+- 默认使用 pnpm，提供类型检查、单元测试、浏览器测试及自动发布。
 
 ## 快速开始
 
-### 创建你的仓库
+环境要求：**Node.js 24+** 和 **pnpm 11.24.0**（版本固定在 `package.json`）。
 
-1. 点击「Use this template」
-2. Git 克隆到本地
-3. 进入仓库目录
+点击仓库的 **Use this template** 创建自己的仓库，克隆后执行：
 
-如果你在使用本模板，欢迎在你的 README 中放置如下徽章：
-
-```md
-[![Using Electronic Documentation Template](https://img.shields.io/badge/Using-Electronic%20Documentation%20Template-blue?style=flat-square&logo=github)](https://github.com/swcxito/electronic-docs-template)
+```sh
+pnpm install
+pnpm dev
 ```
 
-### 构建文档
+打开 Astro 输出的本地地址。本仓库默认是 `http://localhost:4321/electronic-docs-template/`。
 
-#### 方式一：使用 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)（推荐）
-
-1) 安装依赖（首次执行）：
-
-```powershell
-uv sync
+```sh
+pnpm build       # 输出到 dist/
+pnpm preview     # 通过 HTTP 预览生产构建
 ```
 
-2) 构建文档：
+## 编写文档
 
-- 在 Windows（PowerShell）：
+在 `src/content/docs/` 下新增 `.md` 或 `.mdx`，并在 frontmatter 中填写 `title` 和可选的 `description`。在 `astro.config.mjs` 中配置站点信息和侧边栏。
 
-```powershell
-# 使用 uv 直接调用 sphinx-build（跨平台一致）
-uv run sphinx-build -M html source build
+使用组件的页面应采用 MDX。以下导入路径适用于 `src/content/docs/guides/` 下的页面。
 
-# 或使用批处理脚本（等价）
-# uv run .\make.bat html
+### CircuitJS 电路
+
+在 [CircuitJS](https://www.falstad.com/circuit/circuitjs.html) 中创建电路，通过 File 菜单导出链接，提取查询参数 `ctz`。
+
+```mdx
+import Circuit from '../../../components/Circuit.astro';
+import { circuitExample } from '../../../lib/examples';
+
+<Circuit
+  ctz={circuitExample}
+  title="示例电路"
+  height={600}
+  running={true}
+  editable={false}
+/>
 ```
 
-- 在 Linux/macOS：
+将 `circuitExample` 替换为自己的压缩数据字符串。布尔值使用表达式，例如 `running={false}`，不要写成字符串。
 
-```bash
-uv run make html
+| 属性 | 默认值 | 说明 |
+| --- | --- | --- |
+| `ctz` | 必填 | 导出链接中的压缩电路数据 |
+| `title` | Interactive CircuitJS simulation | iframe 无障碍标题 |
+| `height` | `640` | 像素数值或 `600px` 等 CSS 长度 |
+| `width` | `100%` | 宽度，不超过文档区域 |
+| `running` | `true` | 自动开始仿真 |
+| `hideMenu` | `true` | 隐藏菜单 |
+| `hideSidebar` | `false` | 隐藏仿真器侧栏 |
+| `editable` | `false` | 允许编辑电路 |
+| `hideInfoBox` | `false` | 隐藏元件信息框 |
+| `mouseWheelEdit` | `true` | 允许滚轮修改参数 |
+| `lang` | `en` | 错误提示语言，`zh-CN` 使用中文 |
+
+无效数据会显示错误提示，不会创建损坏的仿真 iframe。`public/circuitjs/` 完整保留原模拟器，无需依赖外部仿真服务。
+
+### WaveDrom 时序图
+
+```mdx
+import WaveDrom from '../../../components/WaveDrom.astro';
+
+<WaveDrom title="时钟与总线传输" source={{
+  signal: [
+    { name: 'clk', wave: 'P......' },
+    { name: 'bus', wave: 'x.==.=x', data: ['head', 'body', 'tail'] },
+    { name: 'wire', wave: '0.1..0.' },
+  ],
+}} />
 ```
 
-#### 方式二：使用 pip（建议先创建虚拟环境）
+`source` 支持 WaveJSON 对象和 JSON5 字符串，支持 `signal`、`reg`、`assign`，内置 default、narrow、lowkey 皮肤。每张图生成独立的 SVG 图片，避免同页多图的 ID 和样式冲突。错误数据会使构建失败。语法见 [WaveDrom 教程](https://wavedrom.com/tutorial.html)。
 
-1) 安装依赖（首次执行）：
+## 插件迁移对应关系
 
-```powershell
-pip install -r requirements.txt
+| 原实现 | 新实现 |
+| --- | --- |
+| Sphinx + Alabaster | Astro + Starlight |
+| `myst_parser` | 原生 Markdown/MDX |
+| `sphinxcontrib.wavedrom` | `WaveDrom.astro` + `wavedrom` |
+| `circuitjs_support` | `Circuit.astro` |
+| Python `lzstring` | JavaScript `lz-string` |
+| `html_extra_path` | `public/circuitjs/` |
+
+`.rst`、MyST 指令和 Sphinx 角色需要转换为 Markdown/MDX，新版本不直接解释这些语法。电路参数改为驼峰命名，如 `hide-menu` → `hideMenu`、`mousewheel-edit` → `mouseWheelEdit`。完整说明见[迁移指南](src/content/docs/reference/migration.md)。
+
+## 验证
+
+```sh
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
+pnpm validate
 ```
 
-2) 构建文档：
+`validate` 依次运行类型检查、单元测试、生产构建和浏览器测试，覆盖电路数据、全部参数、根路径与仓库子路径、WaveDrom 输出与错误输入、实际仿真、文档链接、搜索、主题和手机导航。Linux 缺少浏览器系统依赖时使用 `pnpm exec playwright install --with-deps chromium`。
 
-- 在 Windows（PowerShell）：
+## 自动发布
 
-```powershell
-.\make.bat html
+在仓库 **Settings → Pages** 中将 Source 设置为 **GitHub Actions**。推送到 `main` 后，工作流验证并发布 `dist/`；PR 只验证，不发布。
+
+部署时从 GitHub Pages 设置获取站点 URL 和基础路径。其他环境可以配置：
+
+| 环境变量 | 默认值 |
+| --- | --- |
+| `GITHUB_REPOSITORY` | `swcxito/electronic-docs-template`，用于仓库链接与默认 URL |
+| `SITE_URL` | `https://OWNER.github.io` |
+| `BASE_PATH` | `/REPOSITORY`，用户主页仓库则为 `/` |
+
+```sh
+SITE_URL=https://docs.example.com BASE_PATH=/ pnpm build
 ```
 
-- 在 Linux/macOS：
+请通过 HTTP 预览，不要直接用 `file://` 打开构建文件。
 
-```bash
-make html
-```
+## 目录
 
-### 查看生成的文档
+- `astro.config.mjs`：站点、导航、基础路径。
+- `src/content/docs/`：Markdown/MDX 文档。
+- `src/components/`：电路和时序图组件。
+- `src/lib/`：校验、渲染逻辑和原示例数据。
+- `public/circuitjs/`：原 CircuitJS 静态资源。
+- `tests/`：单元与浏览器测试。
+- `.github/workflows/`：验证和发布流程。
 
-> 由于现代浏览器的安全策略，直接从文件系统打开 HTML 时，部分功能（如 CircuitJS 仿真）可能无法正常运行。建议通过本地 Web 服务器查看。
+## 许可证
 
-1) 启动简易 HTTP 服务器：
+模板继续使用 [GPLv2](LICENSE)，文档继续使用 [MIT](LICENSE.docs)。使用者保留自己编写内容的版权，可另行选择内容许可证。
 
-```powershell
-python -m http.server --directory build/html 8080
-```
-
-2) 浏览器访问：`http://localhost:8080`
-
-## 使用说明
-
-### 编写文档
-
-本模板同时支持 reStructuredText 与 Markdown：
-
-- reStructuredText：使用 `.rst` 文件，获得完整的 Sphinx 能力
-- Markdown：使用 `.md` 文件，语法更简洁（通过 MyST 解析器）
-
-Sphinx 文档： [![Sphinx Documentation](https://img.shields.io/badge/Sphinx-docs-blue?logo=sphinx)](https://www.sphinx-doc.org/)
-
-### 电路仿真（CircuitJS）
-
-#### 获取电路数据
-
-1. 打开 [CircuitJS1](https://www.falstad.com/circuit/circuitjs.html)
-2. 新建或加载电路
-3. 依次点击「File」→「Export to URL」，复制生成的 URL
-4. 从 URL 中提取电路数据（`ctz=` 后面的部分）
-
-#### 在文档中嵌入交互式仿真
-
-使用自定义 `circuit` 指令：
-
-```rst
-.. circuit:: your-circuit-data-here
-   :height: 640
-   :width: 100%
-   :running: true
-   :editable: false
-```
-
-可选项说明：
-
-- `height`：iframe 高度（默认 640）
-- `width`：iframe 宽度（默认 100%）
-- `running`：是否自动开始仿真（默认 true）
-- `hideMenu`：是否隐藏顶部菜单（默认 true）
-- `hideSidebar`：是否隐藏右侧栏（默认 false）
-- `editable`：是否允许编辑电路（默认 false）
-- `hideInfoBox`：是否隐藏器件信息框（默认 false）
-- `mouseWheelEdit`：是否启用滚轮修改参数（默认 true）
-
-### 时序图（WaveDrom）
-
-使用 WaveDrom 语法创建波形图：
-
-```rst
-.. wavedrom::
-
-   { "signal": [
-     { "name": "clk",  "wave": "P......" },
-     { "name": "bus",  "wave": "x.==.=x", "data": ["head", "body", "tail"] },
-     { "name": "wire", "wave": "0.1..0." }
-   ]}
-```
-
-WaveDrom 教程： [![WaveDrom Documentation](https://img.shields.io/badge/WaveDrom-tutorial-green?logo=wavedrom)](https://wavedrom.com/tutorial.html)
-
-## 配置说明
-
-主要配置位于 `source/conf.py`：
-
-- 项目信息：`project`、`author`、`copyright`
-- 扩展：添加或移除 Sphinx 扩展
-- 主题：配置 HTML 主题与外观
-
-## 贡献
-
-1. Fork 本仓库
-2. 创建功能分支
-3. 完成你的修改
-4. 确认文档可以正常构建
-5. 发起 Pull Request
-
-## 📜 许可证
-
-### 项目许可
-
-本项目 **electronic-docs-template** 采用 **GNU General Public License, Version 2 (GPLv2)** 授权。
-详见 [LICENSE](./LICENSE)。
-
-© 2025 swcxito.
-在 GPLv2 条款下，你可以自由使用、修改和再分发本模板。
-
----
-
-### 集成的第三方组件
-
-| 组件                      | 源码                                                                                                                           | 许可证                                                          |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
-| **Sphinx**          | [![GitHub](https://img.shields.io/badge/source-sphinx-blue?logo=github)](https://github.com/sphinx-doc/sphinx)                      | ![BSD License](https://img.shields.io/badge/license-BSD-green)    |
-| **sphinx-wavedrom** | [![GitHub](https://img.shields.io/badge/source-sphinx--wavedrom-blue?logo=github)](https://github.com/bavovanachte/sphinx-wavedrom) | ![MIT License](https://img.shields.io/badge/license-MIT-green)    |
-| **CircuitJS1**      | [![GitHub](https://img.shields.io/badge/source-circuitjs1-blue?logo=github)](https://github.com/pfalstad/circuitjs1)                | ![GPLv2 License](https://img.shields.io/badge/license-GPLv2-blue) |
-
----
-
-### 文档内容许可
-
-注意：本仓库中的「文档内容」采用 **MIT 许可证** 授权，详见 [LICENSE.docs](./LICENSE.docs)。
-
-尽管本模板以 **GPLv2** 授权，使用本模板创作的「文档内容」（例如你编写的 `.rst` 或 `.md` 文件）
-可以由作者自行选择许可协议，例如：
-
-- [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-- [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
-- [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
-- 或由作者选择的其他协议
-
-使用本模板创作的新文档，其著作权仍完全归作者本人所有。
-
-## 版本历史
-
-- v0.1（2025）：初始模板发布
-  - 基础 Sphinx 配置
-  - 集成 CircuitJS
-  - 支持 WaveDrom
-  - RTD 主题配置
-
----
-
-作者：swcxito
-版本：0.1
-最后更新：2025
+Astro、Starlight、WaveDrom、ONML、lz-string、JSON5 使用 MIT；CircuitJS1 使用 GPLv2。原字体许可保留在 `public/circuitjs/font/`。组件来源及官方模板版权声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

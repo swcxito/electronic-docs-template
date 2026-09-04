@@ -1,0 +1,17 @@
+---
+import { renderWaveDrom } from '../lib/wavedrom.mjs';
+
+interface Props {
+  source: Record<string, unknown> | string;
+  title?: string;
+}
+const { source, title = 'Timing diagram' } = Astro.props;
+// Each SVG is its own image document: IDs and styles cannot clash across diagrams.
+const src = `data:image/svg+xml;base64,${Buffer.from(renderWaveDrom(source)).toString('base64')}`;
+---
+<figure>
+  <div class="wavedrom" tabindex="0" role="region" aria-label={title}>
+    <img src={src} alt={title} />
+  </div>
+  <figcaption>{title}</figcaption>
+</figure>
