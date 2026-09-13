@@ -11,8 +11,9 @@ export interface CircuitOptions {
 
 export function isValidCircuit(ctz: string): boolean {
   try {
-    return /^[A-Za-z0-9+\-$]+$/.test(ctz)
-      && LZString.decompressFromEncodedURIComponent(ctz)?.startsWith('$ ') === true;
+    if (!/^[A-Za-z0-9+\-$]+$/.test(ctz)) return false;
+    const circuit = LZString.decompressFromEncodedURIComponent(ctz);
+    return circuit?.startsWith('$ ') === true || /^<cir(?:\s|>)/.test(circuit ?? '');
   } catch {
     return false;
   }
@@ -23,7 +24,9 @@ export function circuitUrl(ctz: string, base: string, options: CircuitOptions = 
     running: true, hideMenu: true, hideSidebar: false,
     editable: false, hideInfoBox: false, mouseWheelEdit: true,
   };
-  const params = new URLSearchParams({ ctz });
+  const params = new URLSearchParams();
+  const circuit = LZString.decompressFromEncodedURIComponent(ctz);
+  params.set(circuit ? 'cct' : 'ctz', circuit ?? ctz);
   for (const key of Object.keys(defaults) as (keyof CircuitOptions)[]) {
     params.set(key, String(options[key] ?? defaults[key]));
   }

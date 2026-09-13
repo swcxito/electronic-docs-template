@@ -23,6 +23,8 @@ import { circuitExample } from '../../../lib/examples';
 
 Replace `circuitExample` with your exported data string. Use braces for booleans: `running={false}`, not `running="false"`.
 
+The `ctz` prop accepts the compressed value from a CircuitJS export. The component decodes it internally so both legacy text circuits and newer XML circuit exports load in the bundled simulator.
+
 <Circuit ctz={circuitExample} height="600px" title="CircuitJS simulation on a nested documentation route" />
 
 ## Options

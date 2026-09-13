@@ -7,6 +7,7 @@ import { renderWaveDrom } from '../src/lib/wavedrom.mjs';
 
 test('original circuit is preserved and passes decompression validation', () => {
   assert.equal(isValidCircuit(circuitExample), true);
+  assert.equal(isValidCircuit(LZString.compressToEncodedURIComponent('<cir f="1"></cir>')), true);
   for (const invalid of ['', 'errortest', '<script>', LZString.compressToEncodedURIComponent('not a circuit')]) {
     assert.equal(isValidCircuit(invalid), false);
   }
@@ -16,7 +17,8 @@ test('CircuitJS URLs work at root and project paths, preserving encoded plus sig
   for (const base of ['/', '/electronic-docs-template', '/electronic-docs-template/']) {
     const url = new URL(circuitUrl(circuitExample, base), 'https://example.com');
     assert.equal(url.pathname, `${base.replace(/\/$/, '')}/circuitjs/circuitjs.html`);
-    assert.equal(url.searchParams.get('ctz'), circuitExample);
+    assert.equal(url.searchParams.get('ctz'), null);
+    assert.equal(url.searchParams.get('cct'), LZString.decompressFromEncodedURIComponent(circuitExample));
     assert.equal(url.searchParams.get('running'), 'true');
     assert.equal(url.searchParams.get('editable'), 'false');
     assert.equal(url.searchParams.get('hideMenu'), 'true');
